@@ -1,0 +1,32 @@
+%feed(xmlns="http://www.w3.org/2005/Atom")
+  %title= page['title']
+  %link{:href=>request.url.split(request.fullpath)[0].gsub(/:\d+/, '')}
+  %link(rel="self"){:href=>request.url.gsub(/:\d+/, '')}
+  %id= "urn:uuid:"+page['uuid']
+  %updated= feed[0]['mtime'].xmlschema
+  %author
+    %name= author['name']
+    - if author['email'] and author['email'].length > 0
+      %email= author['email']
+    - if author['uri'] and author['uri'].length > 0
+      %uri= author['uri']
+  
+  -feed.each do |f|
+    %entry
+      %title= f['title']
+      %link{:href=>f['url']}
+      %id= "urn:uuid:"+f['uuid']
+      %updated= f['mtime'].xmlschema
+      %published= f['date'].xmlschema
+      - if f['summary'] and f['summary'].length > 0
+        - s = haml f['summary'], :layout=>false
+        %summary= s.gsub(%r{</?[^>]+?>}, '')
+      - if f['author']
+        %author
+          - if f['author']['name'] and f['author']['name'].length > 0
+            %name= f['author']['name']
+          - if f['author']['email'] and f['author']['email'].length > 0
+            %email= f['author']['email']
+          - if f['author']['uri'] and f['author']['uri'].length > 0
+            %uri= f['author']['uri']
+  

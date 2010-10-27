@@ -1,0 +1,124 @@
+#!/usr/bin/ruby
+require 'fileutils'
+
+def colorize(text, color_code); "\033#{color_code}#{text}\033[0m"; end
+def b(text); colorize(text, "[1m"); end
+
+def h
+  '-'*79+"\n#{b 'Soxer'}, the web publishing tool. | Copyright 2010, Toni Anzlovar.\n"+'-'*79
+end
+
+def err message
+<<END
+#{h}
+#{b message}
+Type #{b 'soxer help'} to get help.
+
+Soxer usage:
+  #{b "soxer [action] [parameters]"}
+  
+END
+end
+
+def notice message
+<<END
+#{h}
+#{b message}
+
+END
+end
+
+@help = <<END
+#{h}
+
+Soxer usage:
+  #{b "soxer [action] [parameters]"}
+  
+Actions:
+
+  #{b 'create'}
+    Creates a new soxer project directory with default sinatra/soxer layout.
+    All aspects can be later customized to suite project's needs.
+    
+    First parameter:
+      #{b 'empty'}     - Creates an empty project
+      More project templates are in the making
+      
+      Other parameters:
+        #{b '[name]'}  - The name of the project directory
+      
+  #{b 'test'}
+    Runs the developement server (in the foreground) on your computer.
+    Point your browser to #{b 'http://localhost:9394'} to view the result.
+    You can exit with standard [ctrl]+c.
+    
+    Parameters:
+      #{b '[int]'} - Port number you wish to run developement on
+    
+  #{b 'help'}
+    Displays this help.
+
+Examples:
+
+#{b '$ soxer create blog myblog'}
+  This command would create a new project directory 'myblog' with a mockup blog
+  soxer/sinatra application in it. You can tweak the design and parameters to
+  acheve the desired experience.
+  
+#{b '$ soxer test 8907'}
+  This command (when executed within the soxer project directory root) will
+  run the developement server on local machine on port 8907.
+  
+END
+
+def create
+  template = $*[1]
+  # Define skeleton parent directory
+  skel = File.dirname(__FILE__)+"/../lib/soxer/skel"
+  # Define destination or default
+  dir = $*[2] ? $*[2] : 'soxer-app'
+  # Copy skeleton to destination or fail if nonexistent
+  if template!=nil and File.exist?(skel+'/'+template) and !File.exist?(dir)
+    src = skel+'/'+template
+    # Check for destination existance
+    if !File.exist?(dir)
+      FileUtils.mkdir(dir)
+      FileUtils.cp_r(src+"/.", dir)
+      return notice "Successfuly created '"+dir+"' Directory."
+      #return Dir.glob(src+"/**/*").to_s
+    else
+      return err 'The destination directory exists.'
+    end
+  else
+    return err 'The project skeleton directory does not exist.'
+  end
+end
+
+def test
+  port = $*[1]!=nil ? $*[1] : '9394'
+  server = false
+  servers = %w[webrick mongrel thin]
+  servers.each do |s|
+    ENV['PATH'].split(':').each {|folder| server = s if File.exists?(folder+'/'+s)}
+  end
+  if server!=false
+    system("rackup -s #{server} -p #{port}")
+    return notice "End of developement mode."
+  else
+    return err "Please install a sinatra compatible web server (thin, mongrel or webrick.)"
+  end
+end
+
+case $*[0]
+  when 'create' then printf create
+  when 'test' then printf test
+  when 'help' then printf @help
+  else printf err 'You did not specify an action!'
+end
+
+
+x = <<END
+      #{b 'corporate'} - Creates a corporate web page mockup
+      #{b 'blog'}      - Creates a blog mockup
+      #{b 'gallery'}   - Creates an image gallery mockup
+END

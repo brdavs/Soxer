@@ -1,0 +1,11 @@
+= 0.9.4 / 2010-10-27
+  
+  * Added executable 'soxer' to help generating application directories and
+    running developement versions
+    
+  * Added skeletal directories, and 'empty' skeleton application
+
+= 0.9.0 / 2010-10-24
+
+  * Initial release
+

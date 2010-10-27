@@ -1,0 +1,8 @@
+!!! 5
+%html( lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" )
+  %head
+    %title= "Title page: "+page['title']
+    %meta(charset="utf-8")
+    %link( href="/css/css.css" media="screen" rel="stylesheet" type="text/css" )
+  %body
+    = yield
