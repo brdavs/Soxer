@@ -1,3 +1,26 @@
+= 0.9.5 / 2010-10-00
+
+  * Inline documentation has been adjusted and slightly improved.
+  
+  * The value of settings.origin is now a global system path, rather than a
+    local path from settings.root. Default is set to 'content', but you can
+    change it by Sinatra's standards.
+  
+  * Atom file as progressed from -atom to .atom (dot atom) and soxer will now
+    server /any/path/to/file.atom with the application/atom+xml content type.
+  
+  * Soxer has been modularized to Sinatra's standards, with the exception of
+    the name. It's still named soxer and not sinatra-soxer. This might change
+    in the future as we hit stable.
+      
+  * Changed get_list method. It only accepts a block for filtering yaml files
+    Any sorting is now done by Array.sort {} afterwards.
+  
+  * Fixed partial generator so it properly handles strings and symbols
+  
+  * Cleaned up "soxer test" and only choose "thin" webserver if available.
+    Defaults to webrick (very slow).
+
 = 0.9.4 / 2010-10-27
   
   * Added executable 'soxer' to help generating application directories and

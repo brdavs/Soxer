@@ -5,9 +5,9 @@ require "app"
 disable :run
 set :server, %w[thin mongrel webrick]
 set :origin, "content"
-set :haml, {:encoding => 'utf-8',
-            :format => :html5, 
-            :attr_wrapper => '"' }
+set :haml, {:format => :html5, 
+            :attr_wrapper => '"'}
+set :haml, {:encoding => 'utf-8'} if RUBY_VERSION=~/1\.9/
 
 configure :development do
   require 'sinatra/reloader'
@@ -15,6 +15,7 @@ configure :development do
 end
 
 configure :production do
+  set :haml, {:ugly => true}
   set :port, 55500
 end
 

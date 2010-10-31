@@ -85,7 +85,6 @@ def create
       FileUtils.mkdir(dir)
       FileUtils.cp_r(src+"/.", dir)
       return notice "Successfuly created '"+dir+"' Directory."
-      #return Dir.glob(src+"/**/*").to_s
     else
       return err 'The destination directory exists.'
     end
@@ -96,27 +95,21 @@ end
 
 def test
   port = $*[1]!=nil ? $*[1] : '9394'
-  server = false
-  servers = %w[webrick mongrel thin]
-  servers.each do |s|
-    ENV['PATH'].split(':').each {|folder| server = s if File.exists?(folder+'/'+s)}
-  end
-  if server!=false
-    system("rackup -s #{server} -p #{port}")
-    return notice "End of developement mode."
-  else
-    return err "Please install a sinatra compatible web server (thin, mongrel or webrick.)"
-  end
+  server = 'webrick'
+  ENV['PATH'].split(':').each {|folder| server = 'thin' if File.exists?(folder+'/thin')}
+  x = system("rackup -s #{server} -p #{port}")
+  return "Developement mode ends."
 end
 
 case $*[0]
   when 'create' then printf create
   when 'test' then printf test
+  when 'prank' then printf prank
   when 'help' then printf @help
   else printf err 'You did not specify an action!'
 end
 
-
+# TO COME LATER
 x = <<END
       #{b 'corporate'} - Creates a corporate web page mockup
       #{b 'blog'}      - Creates a blog mockup
