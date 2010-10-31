@@ -1,4 +1,9 @@
-= 0.9.5 / 2010-10-00
+= 0.9.6 / 2010-10-31
+
+  * Forgot to include the streamlined empty skeleton for a modular style
+    application.
+  
+= 0.9.5 / 2010-10-31
 
   * Inline documentation has been adjusted and slightly improved.
   

@@ -20,4 +20,7 @@ configure :production do
 end
 
 set :environment, :production
-run Sinatra::Application
+
+map '/'
+  run SoxerApp
+end
