@@ -1,3 +1,11 @@
+= 0.9.6.1 / 2010-11-01
+  
+  * Soxer binary cleanup
+
+  * Fixed empty skeleton for proper soxer inclusion
+  
+  * Fixed soxer binary for empty skeleton creation
+    
 = 0.9.6 / 2010-10-31
 
   * Forgot to include the streamlined empty skeleton for a modular style
