@@ -4,8 +4,8 @@ Gem::Specification.new do |s|
   s.rubygems_version = '1.3.7'
 
   s.name              = 'soxer'
-  s.version           = '0.9.6.1'
-  s.date              = '2010-11-01'
+  s.version           = '0.9.7'
+  s.date              = '2010-11-02'
   s.rubyforge_project = 'soxer'
 
   s.summary     = "Dynamic web site generator engine"
@@ -28,6 +28,8 @@ Gem::Specification.new do |s|
   s.files = %w[
     soxer.gemspec
     CHANGES
+    README.md
+    LICENSE
     bin/soxer
     lib/soxer.rb
     lib/soxer/main.rb
