@@ -1,18 +1,3 @@
-<style type="text/css">
-  code { 
-    display: block;
-    width: 480px;
-    color: white;
-    background: black;
-    padding: 15px 10px;
-    margin: 10px 0px;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
-    }
-</style>
-
-
 Soxer, the web publishing tool
 ==============================
 
@@ -22,6 +7,7 @@ system. It enables the developer to quickly setup, design and deploy any web bas
 Soxer is distributed under the terms of [GNU General Public License](http://www.gnu.org/licenses/gpl.htm) and is supported by [Formalibre](http://www.formalibre.si).
 
 It's strong points include:
+
 - All data and configuration is disk based. 
 - Everything is editable with a text editor.
 - There is no relational database back end.
@@ -30,6 +16,7 @@ It's strong points include:
 - It's a Sinatra modular application, so you can easily incorporate it into existing project.
 
 What Soxer is not (yet)...
+
 - ... a complete CMS in classic sense.
 - ... a *turn-key-slap-the-logo-on-and-charge-for-it* solution.
 - ... mature product.
