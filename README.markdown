@@ -31,12 +31,12 @@ You can install soxer by:
 You can benefit by installing 2 more gems:  
 `$ sudo gem install thin rdiscount`
 
-Thin and rdiscount are not necessary for Soxer to run, but they make it run much faster even in development mode. Thin is a production ready rubyweb server, [rdiscount](http://github.com/rtomayko/rdiscount) is a ruby interface to [discount](http://www.pell.portland.or.us/~orc/Code/discount), a C implementation of [Markdown](http://daringfireball.net/projects/markdown).
+Thin and rdiscount are not necessary for Soxer to run, but they make it run much faster even in development mode. [Thin](http://code.macournoyer.com/thin) is a production ready rubyweb server, [rdiscount](http://github.com/rtomayko/rdiscount) is a ruby interface to [discount](http://www.pell.portland.or.us/~orc/Code/discount), a C implementation of [Markdown](http://daringfireball.net/projects/markdown).
 
 To create a "hello world" type 'empty' application named 'webpage', you can run:  
 `$ soxer create empty webpage`
 
-The directory webpage, which you just created has everything you need to run your first soxer application. Just enter it and run soxer in developement mode:
+The directory webpage, which you just created has everything you need to run your first soxer application. Just enter it and run soxer in developement mode:  
 <code>
   $ cd webpage; soxer test
 </code>
