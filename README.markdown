@@ -8,12 +8,12 @@ Soxer is distributed under the terms of [GNU General Public License](http://www.
 
 It's strong points include:
 
-* All data and configuration is disk based. 
-* Everything is editable with a text editor.
-* There is no relational database back end.
-* It uses and follows standards. The document format is [YAML](http://www.yaml.org)
-* Document model is loose (adaptable "on the fly") and only determined by your views or partials.
-* It's a Sinatra modular application, so you can easily incorporate it into existing project.
+- All data and configuration is disk based. 
+- Everything is editable with a text editor.
+- There is no relational database back end.
+- It uses and follows standards. The document format is [YAML](http://www.yaml.org)
+- Document model is loose (adaptable "on the fly") and only determined by your views or partials.
+- It's a Sinatra modular application, so you can easily incorporate it into existing project.
 
 What Soxer is not (yet)...
 

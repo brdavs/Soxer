@@ -28,7 +28,7 @@ Gem::Specification.new do |s|
   s.files = %w[
     soxer.gemspec
     CHANGES
-    README.md
+    README.markdown
     LICENSE
     bin/soxer
     lib/soxer.rb
