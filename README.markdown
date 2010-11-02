@@ -37,7 +37,6 @@ To create a "hello world" type 'empty' application named 'webpage', you can run:
 `$ soxer create empty webpage`
 
 The directory webpage, which you just created has everything you need to run your first soxer application. Just enter it and run soxer in developement mode:
-
 <code>
   $ cd webpage; soxer test
 </code>
