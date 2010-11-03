@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency('sinatra', "~> 1")
   s.add_dependency('haml', "~> 3")
   s.add_dependency('uuid', "~> 2")
+  s.add_dependency('sinatra-reloader', "~> 0.5")
 
   # = MANIFEST =
   s.files = %w[

@@ -1,3 +1,13 @@
+= 0.9.7 / 2010-11-01
+  
+  * Fixed "views/css/css.sass" for empty skeleton to comply with new sass notation.
+  
+  * Created a README.markdown document
+  
+  * Added sinatra-reloader as dependency, although it's only needed in developement mode.
+  
+  * Added proper license
+  
 = 0.9.6.1 / 2010-11-01
   
   * Soxer binary cleanup
