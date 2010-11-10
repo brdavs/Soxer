@@ -1,4 +1,10 @@
-= 0.9.7 / 2010-11-01
+= 0.9.7 / 2010-11-09
+  
+  * More RDOC documentation added
+  
+  * Fixed sitemap generator to use new settings.origin. This was a severe bug.
+
+= 0.9.7 / 2010-11-03
   
   * Fixed "views/css/css.sass" for empty skeleton to comply with new sass notation.
   

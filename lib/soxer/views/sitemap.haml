@@ -2,9 +2,9 @@
   site = env['HTTP_X_FORWARDED_HOST'] ? env['HTTP_X_FORWARDED_HOST'] : env['HTTP_HOST']
 
 %urlset(xmlns="http://www.sitemaps.org/schemas/sitemap/0.9")
-  - pattern = File.join( settings.root, settings.origin, "**", "*.yaml" )
+  - pattern = File.join( settings.origin, "**", "*.yaml" )
   - Dir.glob(pattern).each do |file|
     %url
-      %loc= "http://#{site}"+file.gsub(/#{settings.root}\/#{settings.origin}(.+)\.yaml$/, "\\1" ).gsub(/(.+)\/index$/, "\\1" )
+      %loc= "http://#{site}"+file.gsub(/#{settings.origin}(.+)\.yaml$/, "\\1" ).gsub(/(.+)\/index$/, "\\1" )
       %lastmod= File.mtime( file ).xmlschema
 

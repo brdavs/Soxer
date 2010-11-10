@@ -130,7 +130,7 @@ module Sinatra
         end.compact
       end
   
-      #=== The "sitemap" the sitemap generator
+      #=== The "sitemap" the sitemap generator partial
       #
       # This funnction accepts no arguments. It simply renders a sitemap file
       # with all available urls from the site
@@ -141,7 +141,7 @@ module Sinatra
       end
   
   
-      #=== The "atom" the atom feed generator
+      #=== The "atom" the atom feed generator partial
       #
       # This method accepts an author (which is the global feed's author)
       # This is a required option, as the feed is only valid if it has at least
@@ -172,17 +172,39 @@ module Sinatra
         out << haml( template, :layout => false, :locals => { :page=>get_page, :feed=>output, :author=>author } )
       end
       
+      #=== The "google_ads" helper partial
+      #
+      # This function accepts :locals with the following symbols:
+      # :client = google ads client ID
+      # :slot   = google ads ad slot
+      # :width  = google ads element width
+      # :height = google ads element height
       def google_ads options={}
         template = File.read File.join( File.dirname(__FILE__), 'views', 'google_ads.haml' )
         pattern = File.join( settings.origin, "**", "*.yaml" )
         haml( template, options.merge!( :layout => false ) )
       end
       
+      #=== The "Disqus" helper partial
+      #
+      # This function accepts :locals with the following symbols:
+      # :account = Disqus account
+      # If you call this helper with :account it will include and render
+      # the discuss articles (for instance - at the end of your post). Calling 
+      # this helper without :account parameter will include the Disqus closure 
+      # script (somewhere close to the bottom of the page).
       def disqus options={}
         template = File.read File.join( File.dirname(__FILE__), 'views', 'disqus.haml' )
         haml( template, options.merge!( :layout => false ) )
       end
       
+      #=== The "Google Analytics" helper partial
+      #
+      # This function accepts :locals with the following symbols:
+      # :tracker = Google Analytics tracker token
+      # It uses the new basic async script. For more elaborate use, please
+      # consult Google manuals and construct your own partial to suite your
+      # needs.
       def google_analytics options={}
         template = File.read File.join( File.dirname(__FILE__), 'views', 'google_analytics.haml' )
         haml( template, options.merge!( :layout => false ) )
