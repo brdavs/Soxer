@@ -85,8 +85,7 @@ def create template, dir
     when File.exist?(dir) then
       return err "The destination directory exists."
     else
-      FileUtils.mkdir(dir)
-      FileUtils.cp_r( Dir.glob( File.join(skel, template, '*') ), dir)
+      FileUtils.copy_entry( File.join(skel, template), dir)
       return notice "Successfuly created '#{dir}' application directory from '#{template}'."
   end
 end
@@ -96,7 +95,7 @@ def test port
   server = 'webrick'
   ENV['PATH'].split(':').each {|folder| server = 'thin' if File.exists?(folder+'/thin')}
   system("rackup -s #{server} -p #{port}")
-  return "Developement mode ends."
+  return "Developement mode ends.\n\n"
 end
 
 case $*[0]

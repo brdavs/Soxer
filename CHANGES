@@ -1,16 +1,37 @@
-= 0.9.7 / 2010-11-09
+= 0.9.8 / 2010-11-09
   
-  * More RDOC documentation added
+  * YAML file downloading disabled. This was a severe bug.
+  
+  * Url-to-file routing completely redone, now far more flexible and 
+    extendible, while less error prone.
+  
+  * Atom feed generator completely redone. Not backwards compatible. However, 
+    it was not logical and mostly broken anyway.
+  
+  * Added breadcrumb generator function
+  
+  * Added ttf/otf mime types to default Rack set
+  
+  * Fixed skeleton creation to include empty directories.
+  
+  * Developement mode output padded with newline. Annoyance only.
+  
+  * get_list now filters list of files: If both 'dir/something.yaml' and 
+    'dir/something/index.html' exist, only the first is included.
+  
+  * More RDOC documentation added.
   
   * Fixed sitemap generator to use new settings.origin. This was a severe bug.
 
 = 0.9.7 / 2010-11-03
   
-  * Fixed "views/css/css.sass" for empty skeleton to comply with new sass notation.
+  * Fixed "views/css/css.sass" for empty skeleton to comply with new sass 
+    notation.
   
   * Created a README.markdown document
   
-  * Added sinatra-reloader as dependency, although it's only needed in developement mode.
+  * Added sinatra-reloader as dependency, although it's only needed in 
+    developement mode.
   
   * Added proper license
   

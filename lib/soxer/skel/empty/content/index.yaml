@@ -1,7 +1,6 @@
-uuid: 151af640-c35a-012d-f6b7-001e378a2988
-date: 2010-10-26T20:03:43+02:00
 title: Hello world!
 content: |
   %h1= page['title']
   %h2 Congratulations!
-  %p You have just created your first #{link_to 'soxer', 'http://soxer.mutsu.org'} application.
+  %p You have just created your first #{link_to 'Soxer', 'http://soxer.mutsu.org'} application.
+

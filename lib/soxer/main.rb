@@ -120,12 +120,15 @@ module Sinatra
       # files from "origin" directory. It can be sorted by using Array.sort
       # method.
       def get_list &block 
-        pattern = File.join( settings.origin, "**", "*.yaml" )
-        output = Dir.glob(pattern).map! do |f|
+        fileset= Dir.glob File.join( settings.origin, "**", "*.yaml" )
+        fileset.delete_if {|d| (d=~/\/index.yaml$/ and fileset.include? d[0..-12]+'.yaml') }
+        output = fileset.map! do |f|
           file = Filereader.new
           file.filename = f
           if block_given?
             f = block.call file.get_content
+          else
+            f = file.get_content
           end
         end.compact
       end
@@ -139,37 +142,28 @@ module Sinatra
         out = '<?xml version="1.0" encoding="UTF-8"?>'+"\n"
         out << haml( template, :layout => false )
       end
-  
-  
-      #=== The "atom" the atom feed generator partial
+
+      #=== The "breadcrumb" generator partial
       #
-      # This method accepts an author (which is the global feed's author)
-      # This is a required option, as the feed is only valid if it has at least
-      # the global author. If individual articles have a yaml field "author",
-      # the individual article's author is used for that article. In both cases,
-      # author is a hash consisting of values 'name', 'email', 'url', of which
-      # at least the 'name' should always be present.
+      # This function accepts :locals with the following symbols:
+      # :home = The name of the link 'home'
+      def breadcrumb options={}
+        template = File.read File.join( File.dirname(__FILE__), 'views', 'breadcrumb.haml' )
+        haml( template, options.merge!( :layout => false ) )
+      end
+        
+      #=== Atom feed generator helper
+      #
+      #==== Accepts:
+      # [doc] FAFSD
       # 
-      #==== autor
-      # Hash of values as required by the Atom standard:
-      # 'name', 'email' and 'url'. Only name is reuired.
-      #
-      #==== &block
-      # Block is a callback. Every file (in hash form) is passed to block and
-      # the block acts as the filter. That way only pages which are returned by
-      # block are included in the feed
-      def atom author=author, &block
-        template = File.read File.join( File.dirname(__FILE__), 'views', 'atom.haml' )
-        pattern = File.join( settings.origin, "**", "*.yaml" )
-        output = Dir.glob(pattern).map! do |f|
-          file = Filereader.new
-          file.filename = f
-          if block_given?
-            block.call file.get_content
-          end
-        end.compact!.sort!{|b,a| a.to_a[0] <=> b.to_a[0] }
-        out = '<?xml version="1.0" encoding="UTF-8"?>'+"\n"
-        out << haml( template, :layout => false, :locals => { :page=>get_page, :feed=>output, :author=>author } )
+      #==== Returns:
+      # :string: = 
+      def atom( doc, options={} )
+				template = File.read File.join( File.dirname(__FILE__), 'views', 'atom.haml' )
+				haml template, options.merge!( { :layout => false, 
+				                                 :format => :xhtml,
+				                                 :locals => { :doc => doc } } )
       end
       
       #=== The "google_ads" helper partial
@@ -269,32 +263,52 @@ module Sinatra
       
       set :origin, File.join(app.settings.root, 'content')
       
+      mime_type :otf, 'application/x-font-TrueType'
+      mime_type :ttf, 'application/x-font-TrueType'
+      
       app.get("/sitemap.xml") { sitemap }
-      
-      app.get "/*.css" do
-        content_type "text/css", :charset => "utf-8"
-        sass params[:splat][0].to_sym
-      end
-      
-      app.get '*.*' do
-        file = File.join( settings.origin, params[:splat].join('.') )
-        case params[:splat][1]
-          when /[jpg|png|pdf|doc|docx|xls|xlsx|pdf|]/i then send_file(file, :disposition => nil)
-        end
-      end
- 
+
+      app.get %r{(.*\.([^.]*))$} do
+				content_type "text/html", :charset => "utf-8"
+				url = params[:captures][0]
+				type = params[:captures][1]
+				file = File.join settings.origin, url
+				
+				case type
+					when 'yaml' then 
+						throw :halt, [404, "Document not found"]
+						
+					when /^jpg|png|pdf|doc|docx|xls|xlsx|pdf|ttf|otf$/i then
+						send_file(file, :disposition => nil) if File.exist? file
+						throw :halt, [404, "Document not found"]if  !File.exist? file
+						
+					when /^css$/i then 
+						content_type "text/css", :charset => "utf-8"
+					  sass url.sub('.'+type, '').to_sym
+					  
+					when 'atom' then 
+						content_type "application/atom+xml", :charset => "utf-8"
+						page = get_page url
+						layout = File.read File.join( File.dirname(__FILE__), 'views', 'atom_layout.haml' )
+						haml page['content'], :layout => layout,
+																  :format => :xhtml,
+						                      :locals => { :page => page }
+						
+
+					when 'rss' then 
+						'RSS is not supported yet'
+						
+					else throw :halt, [404, "Document not found"]
+				end
+			end
+
       app.get '*/?' do
         content_type "text/html", :charset => "utf-8"
-        
-        if params[:splat].last =~ /\.atom$/ then
-          set :haml, { :format => :xhtml }
-          content_type "application/atom+xml", :charset => "utf-8"
-        end
-      
         page = get_page
         page['layout'] ||= 'layout'
         haml page['content'], :layout => page['layout'].to_sym, :locals => { :page => page }
       end
+      
     end
   end
   
