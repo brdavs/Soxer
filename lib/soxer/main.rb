@@ -3,7 +3,9 @@ require 'yaml'
 require 'haml'
 require 'uuid'
 
-
+#== Sinatra, web publishing DSL
+#
+# http://www.sinatrarb.com
 module Sinatra
   
   #== Soxer, the web publishing tool.
@@ -22,19 +24,26 @@ module Sinatra
     
     # === The Filereader class
     #
-    # In addition to reading the YAML file it also adds two fields to the file:
-    # uuid: Universally Unique Identifier for atom and other feeds. Please, note
-    #       that this id is not compared to other uuids. When creating a new
-    #       document it's best to let soxer generate it.
-    # date: A standard date field. When creating a new document it's best to 
-    #       let soxer generate it.
+    # Filereader is responsible for reading a YAML file, that contains the
+    # content and metadata for each web page.
+    #
+    # Filereader also assumes that each YAML file contains 2 top level fields:
+    # uuid:: A Universally Unique Identifier field 
+    # date:: A standard date and time field
+    # if the fields are not present, they are automatically generated and
+    # saved in the file.
     class Filereader
+      # The name of the YAML file
       attr_accessor :filename
-
+      
+      # The standard Sinatra application settings, recieved from sinatra/base.
+      # These settings are configurable in __./config.ru__ file in the application
+      # directory.
       def settings
         @s = Sinatra::Application
       end
       
+      # The method, that retuns the YAML structure in a ::hash::.
       def get_content
         self.settings
         out = YAML.load_file( @filename )
@@ -47,6 +56,8 @@ module Sinatra
       
       private
       
+      # A private method, that generates and adds a Universally Unique 
+      # Identifier field to the data structure.
       def add_id
         mtime = File.mtime( @filename )
         File.open( @filename, 'r+' ) do |f|
@@ -57,6 +68,7 @@ module Sinatra
         File.utime( 0, mtime, @filename )
       end
       
+      # A private method, that adds a standard Time.now to the data structure.
       def add_date
         mtime = File.mtime( @filename )
         File.open( @filename, 'r+' ) do |f|
@@ -74,12 +86,19 @@ module Sinatra
     # (the default is "content" directory within application root) or a 
     # directory path with index.yaml
     class Urlreader
+
+      # Url, recieved from the request
       attr_accessor :url
 
+      # The standard Sinatra application settings, recieved from sinatra/base.
+      # These settings are configurable in __./config.ru__ file in the application
+      # directory.
       def settings
         @s = Sinatra::Application
       end
       
+      # Creates a filereader instance, maps the url to either yaml file or 
+      # index.yaml within a directory represented by url.
       def get_content
         self.settings
         fn = case true
@@ -93,32 +112,36 @@ module Sinatra
       end
     end
     
+    # === Helper module
+    # 
+    # This module introduces several helper methods to Soxer application.
     module Helpers
-      # === The "get_page", the document reading function
-      #
-      # Read the document in yaml format (with .yaml) ending directly mapped from
-      # the given parameter. Sinatra's *settings.route* and Soxers 
-      # *settings.origin* are prefixed to the path in order to get an absolute
-      # filename. If the filename cannot be found, a directory by that name and
-      # an index file within are probed and read.
+      # === Document reader
+      # This method reads a yaml file from disk and returns a hash.
       # 
-      # If no parameter is given, the entire route is taken as the argument.
+      # ====Accepts
+      # [url => String] 
+      #   The string url. If empty, url recieved is used.
+      #
+      # ====Returns
+      # [=> Hash]
+      #   A hash representation of yaml file.
       def get_page url=params[:splat][0]
         out = Urlreader.new
         out.url = url
         out.get_content
       end
   
-      #=== The "get_list" the document listing function
+      # === Document list generator method
+      # This method returns a list of documents filtered by &block statement.
+      # 
+      # ====Accepts
+      # [&block] 
+      #   A callback method for filtering all available file.
       #
-      # The get_list function is the aggregator function. It reads all available
-      # yaml files (that map to urls directly) and outputs them according to the
-      # arguments you send it. Get_list only accepts a block.
-      #==== &block
-      # Block is a callback, which filters the entire array of yaml files.
-      # The result is an array of hashes, representing a subset of all yaml
-      # files from "origin" directory. It can be sorted by using Array.sort
-      # method.
+      # ====Returns
+      # [=> Array]
+      #   Array of hashes representing yaml files.
       def get_list &block 
         fileset= Dir.glob File.join( settings.origin, "**", "*.yaml" )
         fileset.delete_if {|d| (d=~/\/index.yaml$/ and fileset.include? d[0..-12]+'.yaml') }
@@ -137,116 +160,157 @@ module Sinatra
       #
       # This funnction accepts no arguments. It simply renders a sitemap file
       # with all available urls from the site
+      
+      # === Sitemap generator method
+      # This generated an XML sitemap.
+      # 
+      # ====Accepts
+      # This method does not accept arguments.
+      #
+      # ====Returns
+      # [=> String]
+      #   An XML representing the contents of the web site.
       def sitemap
         template = File.read File.join( File.dirname(__FILE__), 'views', 'sitemap.haml' )
         out = '<?xml version="1.0" encoding="UTF-8"?>'+"\n"
         out << haml( template, :layout => false )
       end
 
-      #=== The "breadcrumb" generator partial
+      # === The breadcrumb generator
+      # This method generates a stylable breadcrumb based on document's directory path.
+      # 
+      # ==== Accepts
+      # [options => Hash]
+      #   Additional options, passed to haml interpreter
       #
-      # This function accepts :locals with the following symbols:
-      # :home = The name of the link 'home'
+      # ==== Returns
+      # [ => String]
+      #   Html string containing breadcrumb path with links.
       def breadcrumb options={}
         template = File.read File.join( File.dirname(__FILE__), 'views', 'breadcrumb.haml' )
         haml( template, options.merge!( :layout => false ) )
       end
         
-      #=== Atom feed generator helper
-      #
-      #==== Accepts:
-      # [doc] FAFSD
+      # === The atom feed generator
+      # This method generates an atom entry from a document.
       # 
-      #==== Returns:
-      # :string: = 
-      def atom( doc, options={} )
+      # ====Accepts
+      # [doc => Hash] 
+      #   The document hash, read from a YAML source
+      # [options => hash]
+      #   Additional options, passed to haml interpreter
+      #
+      # ====Returns
+      # [=> String]
+      #   Atom feed entry.
+      def atom doc, options={}
 				template = File.read File.join( File.dirname(__FILE__), 'views', 'atom.haml' )
 				haml template, options.merge!( { :layout => false, 
 				                                 :format => :xhtml,
 				                                 :locals => { :doc => doc } } )
       end
       
-      #=== The "google_ads" helper partial
+      # === Google ads generator method
+      # Returns the google ads code, according to arguments.
+      # 
+      # ====Accepts
+      # [options => Hash] 
+      #   Hash element :locals containing the following symbols
+      #     :client = google ads client ID
+      #     :slot   = google ads ad slot
+      #     :width  = google ads element width
+      #     :height = google ads element height
       #
-      # This function accepts :locals with the following symbols:
-      # :client = google ads client ID
-      # :slot   = google ads ad slot
-      # :width  = google ads element width
-      # :height = google ads element height
+      # ====Returns
+      # [=> String]
+      #   Html partial for the particular google ad.
       def google_ads options={}
         template = File.read File.join( File.dirname(__FILE__), 'views', 'google_ads.haml' )
         pattern = File.join( settings.origin, "**", "*.yaml" )
         haml( template, options.merge!( :layout => false ) )
       end
       
-      #=== The "Disqus" helper partial
+      # === Disquss helper method
+      # Returns the code for disqus comments.  
+      # Calling this method without parameters generates javascript code needed
+      # at the end of each page containing disqus comments code.
+      # 
+      # ====Accepts
+      # [options => Hash] 
+      #   Hash element :locals containing the following symbols
+      #     :account = google ads client ID
       #
-      # This function accepts :locals with the following symbols:
-      # :account = Disqus account
-      # If you call this helper with :account it will include and render
-      # the discuss articles (for instance - at the end of your post). Calling 
-      # this helper without :account parameter will include the Disqus closure 
-      # script (somewhere close to the bottom of the page).
+      # ====Returns
+      # [=> String]
+      #   Html code that includes Disquss comments.
       def disqus options={}
         template = File.read File.join( File.dirname(__FILE__), 'views', 'disqus.haml' )
         haml( template, options.merge!( :layout => false ) )
       end
       
-      #=== The "Google Analytics" helper partial
+      # === Google analytics helper method
+      # Returns the basic google analytics asynchronous tracking code.
+      # 
+      # ====Accepts
+      # [options => Hash] 
+      #   Hash element :locals containing the following symbols
+      #     :tracker = google analytics tracker token
       #
-      # This function accepts :locals with the following symbols:
-      # :tracker = Google Analytics tracker token
-      # It uses the new basic async script. For more elaborate use, please
-      # consult Google manuals and construct your own partial to suite your
-      # needs.
+      # ====Returns
+      # [=> String]
+      #   Google analytics asynchronous tracking code.
       def google_analytics options={}
         template = File.read File.join( File.dirname(__FILE__), 'views', 'google_analytics.haml' )
         haml( template, options.merge!( :layout => false ) )
       end
   
-      #=== "partial" rails like partial generator
-      #
-      # This funnction accepts a string and matches it to a haml layout (with a
-      # underscore prepended) Sinatra's layouts directory. 
+      # === Partial snippet generator method
+      # Returns a partial from ./views directory as specified in sinatra's
+      # manual.
       # 
-      #==== snippet
-      # A string that maps to a haml view in the views directory
-      # "partial :example, :layout => false" would map to a views/_example.haml
+      # ====Accepts
+      # [snippet => Symbol]
+      #   Symbol, representing a partial in the ./views directory (as specified by Sinatra)
+      #   Note, that the name of the file follows a RoR convention:
+      #   :some_file maps to ./views/_some_file.haml
+      # [options => hash]
+      #   Additional options, passed to haml interpreter
       #
-      #==== options={}
-      # Any options you pass to this partial ger merged and sent to haml as
-      # sinatra's haml options (this is usefull for passing sinatra's :layout,
-      # :locals and other variables)
+      # ====Returns
+      # [=> String]
+      #   Html partial.
       def partial(snippet, options={})
         haml ('_'+snippet.to_s).to_sym, options.merge!(:layout => false)
       end
       
-      #=== "link_to" rails like link_to generator
-      #
-      # This funnction accepts a 1 or 2 strings. 
+      # === Link tag generator method
+      # Generates Html <a href="#"></a> tag accordng to RoR convention.
       # 
-      #==== text
-      # A string that becomes the link text. If there is no second parameter,
-      # link_to converts the string into a local url by replacing all spaces with
-      # an underscore and downcasing the string.
+      # ==== Accepts
+      # [test => string]
+      #   Visible content of the link (the linked text).
+      # [url => string]
+      #   Url the linked text points to.
       #
-      #==== url
-      # This string is used for 'href' in a link
-      def link_to(text, url="/#{text.downcase.gsub(/\s/,'_')}")
+      # ==== Returns
+      # [ => String]
+      #   Html link tag.
+      def link_to text, url="/#{text.downcase.gsub(/\s/,'_')}"
         url.gsub!(/^\//, '') if url =~ /.+:\/\//
         "<a href=\"#{url}\"> #{text}</a>"
       end
       
-      # A simple string obuscator.
-      # Useful for hiding emails and such
-      #=== "obfuscate" simple string obuscator.
-      #
-      # This funnction accepts a 1 or 2 strings. 
+      # === String obfuscator method
+      # Converts strings into a stream of html character codes.
       # 
-      #==== str=nil
-      # Obfuscates a string replacing characters with html entities.
-      # Useful for hiding emails and such
-      def obfuscate(str=nil)
+      # ==== Accepts
+      # [str => string]
+      #   String of arbitrary length.
+      #
+      # ==== Returns
+      # [ => String]
+      #   Html character string.
+      def obfuscate str=nil
         out = []
         str.each_byte {|c| out << "&##{c};" }
         out.join
@@ -254,7 +318,7 @@ module Sinatra
       
     end
     
-    def self.registered(app)
+    def self.registered(app) #:nodoc: all
       app.helpers Soxer::Helpers
       
       def app.settings 
@@ -265,6 +329,7 @@ module Sinatra
       
       mime_type :otf, 'application/x-font-TrueType'
       mime_type :ttf, 'application/x-font-TrueType'
+      mime_type :eot, 'application/vnd.ms-fontobject'
       
       app.get("/sitemap.xml") { sitemap }
 

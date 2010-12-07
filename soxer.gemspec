@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
 
   s.name              = 'soxer'
   s.version           = '0.9.8'
-  s.date              = '2010-11-24'
+  s.date              = '2010-11-28'
   s.rubyforge_project = 'soxer'
 
   s.summary     = "Dynamic web site generator engine"
@@ -34,7 +34,7 @@ Gem::Specification.new do |s|
     bin/soxer
     lib/soxer.rb
     lib/soxer/main.rb
-  ] + Dir.glob("{lib/soxer/views,lib/soxer/skel}/**/*")
+  ] + Dir.glob("{lib/soxer/views,lib/soxer/skel}/**")
   # = MANIFEST =
   
   s.executables = ['soxer']

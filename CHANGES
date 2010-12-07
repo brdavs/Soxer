@@ -1,4 +1,14 @@
-= 0.9.8 / 2010-11-09
+= 0.9.9 / 2010-11-28
+  
+  * Added .eot font to the mime collection to Rack
+  
+  * Cleaned up the superfuous blocks of documentation.
+  
+= 0.9.8 / 2010-11-28
+  
+  * Standardized and beautified code (no particular standard though.)
+  
+  * Rdoc documentation rewritten from scratch.
   
   * YAML file downloading disabled. This was a severe bug.
   
@@ -18,9 +28,7 @@
   
   * get_list now filters list of files: If both 'dir/something.yaml' and 
     'dir/something/index.html' exist, only the first is included.
-  
-  * More RDOC documentation added.
-  
+      
   * Fixed sitemap generator to use new settings.origin. This was a severe bug.
 
 = 0.9.7 / 2010-11-03
