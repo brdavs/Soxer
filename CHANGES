@@ -1,8 +1,19 @@
-= 0.9.9 / 2010-11-28
+= 0.9.9 / 2011-03-03
+
+  * Changed the names of Classes to match CamelCase convention in Ruby
   
   * Added .eot font to the mime collection to Rack
   
   * Cleaned up the superfuous blocks of documentation.
+  
+  * Fixed interpretation of layout: 'false' statement, if used inside yaml 
+    file.
+  
+  * Added dependancy on 'hashie' gem. Now page keys can be accessed 
+    as hash keys(strings or symbols) as well as methods.
+    The following will yield the same: page[:date], page['date'], page.date
+  
+  * Finally resolved the inclusion of empty directories within skeleton dirs.
   
 = 0.9.8 / 2010-11-28
   

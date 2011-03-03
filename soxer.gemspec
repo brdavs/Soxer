@@ -4,8 +4,8 @@ Gem::Specification.new do |s|
   s.rubygems_version = '1.3.7'
 
   s.name              = 'soxer'
-  s.version           = '0.9.8'
-  s.date              = '2010-11-28'
+  s.version           = '0.9.9'
+  s.date              = '2011-03-03'
   s.rubyforge_project = 'soxer'
 
   s.summary     = "Dynamic web site generator engine"
@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency('sinatra', "~> 1")
   s.add_dependency('haml', "~> 3")
   s.add_dependency('uuid', "~> 2")
+  s.add_dependency('hashie', "~> 1.0.0")
   s.add_dependency('sinatra-reloader', "~> 0.5")
 
   # = MANIFEST =
@@ -34,7 +35,7 @@ Gem::Specification.new do |s|
     bin/soxer
     lib/soxer.rb
     lib/soxer/main.rb
-  ] + Dir.glob("{lib/soxer/views,lib/soxer/skel}/**")
+  ] + Dir.glob("{lib/soxer/views,lib/soxer/skel/**}/**")
   # = MANIFEST =
   
   s.executables = ['soxer']

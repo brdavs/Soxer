@@ -61,8 +61,8 @@ def help
   
   Examples:
   
-  #{b '$ soxer create blog myblog'}
-    This command would create a new project directory 'myblog' with a mockup blog
+  #{b '$ soxer create empty app'}
+    This command would create a new project directory 'app' with a mockup empty
     soxer/sinatra application in it. You can tweak the design and parameters to
     acheve the desired experience.
     
@@ -86,6 +86,7 @@ def create template, dir
       return err "The destination directory exists."
     else
       FileUtils.copy_entry( File.join(skel, template), dir)
+      FileUtils.rm Dir.glob('**/EMPTY')
       return notice "Successfuly created '#{dir}' application directory from '#{template}'."
   end
 end

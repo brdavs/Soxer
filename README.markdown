@@ -19,7 +19,6 @@ What Soxer is not (yet)...
 
 - ... a complete CMS in classic sense.
 - ... a *turn-key-slap-the-logo-on-and-charge-for-it* solution.
-- ... mature product.
 
 
 Test drive the soxer

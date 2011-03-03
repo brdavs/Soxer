@@ -1,3 +1,6 @@
+# encoding: utf-8
+
+require 'hashie'
 require 'sinatra/base'
 require 'yaml'
 require 'haml'
@@ -22,17 +25,17 @@ module Sinatra
   # License:   Distributed under the GPL licence. http://www.gnu.org/licenses/gpl.html
   module Soxer
     
-    # === The Filereader class
+    # === The FileReader class
     #
-    # Filereader is responsible for reading a YAML file, that contains the
+    # FileReader is responsible for reading a YAML file, that contains the
     # content and metadata for each web page.
     #
-    # Filereader also assumes that each YAML file contains 2 top level fields:
+    # FileReader also assumes that each YAML file contains 2 top level fields:
     # uuid:: A Universally Unique Identifier field 
     # date:: A standard date and time field
     # if the fields are not present, they are automatically generated and
     # saved in the file.
-    class Filereader
+    class FileReader
       # The name of the YAML file
       attr_accessor :filename
       
@@ -79,13 +82,13 @@ module Sinatra
       end
     end
     
-    # === The Urlreader class
+    # === The UrlReader class
     #
-    # Urlreader simply checks if the URL recieved can be matched to a file.
+    # UrlReader simply checks if the URL recieved can be matched to a file.
     # Currelntly it either matches a file path (ending with .yaml) from origin 
     # (the default is "content" directory within application root) or a 
     # directory path with index.yaml
-    class Urlreader
+    class UrlReader
 
       # Url, recieved from the request
       attr_accessor :url
@@ -97,7 +100,7 @@ module Sinatra
         @s = Sinatra::Application
       end
       
-      # Creates a filereader instance, maps the url to either yaml file or 
+      # Creates a FileReader instance, maps the url to either yaml file or 
       # index.yaml within a directory represented by url.
       def get_content
         self.settings
@@ -106,9 +109,33 @@ module Sinatra
              when File.exist?( f = File.join( @s.origin, @url+'/index.yaml' ) ) then f
              else throw :halt, [404, "Document not found"]
              end
-        out = Filereader.new
+        out = FileReader.new
         out.filename = fn
         out.get_content
+      end
+    end
+    
+    # === The DocumentStore class
+    #
+    # DocumentStore class extends the hash to enable document attribute access
+    # in one of three ways:
+    # hash key:    page['key'] => value
+    # method call: page.key => value
+    # symbol:      page[:key] => value
+    class Document < Hash
+      def initialize(attrs)
+        attrs.each do |k, v|
+          self[k] = v
+        end
+      end
+    
+      def []=(k, v)
+        unless respond_to?(k)
+          self.class.send :define_method, k do
+            self[k]
+          end
+        end
+        super
       end
     end
     
@@ -127,9 +154,9 @@ module Sinatra
       # [=> Hash]
       #   A hash representation of yaml file.
       def get_page url=params[:splat][0]
-        out = Urlreader.new
+        out = UrlReader.new
         out.url = url
-        out.get_content
+        Hashie::Mash.new out.get_content
       end
   
       # === Document list generator method
@@ -146,7 +173,7 @@ module Sinatra
         fileset= Dir.glob File.join( settings.origin, "**", "*.yaml" )
         fileset.delete_if {|d| (d=~/\/index.yaml$/ and fileset.include? d[0..-12]+'.yaml') }
         output = fileset.map! do |f|
-          file = Filereader.new
+          file = FileReader.new
           file.filename = f
           if block_given?
             f = block.call file.get_content
@@ -371,7 +398,8 @@ module Sinatra
         content_type "text/html", :charset => "utf-8"
         page = get_page
         page['layout'] ||= 'layout'
-        haml page['content'], :layout => page['layout'].to_sym, :locals => { :page => page }
+        page['layout'] == 'false' ? layout = false : layout = page['layout'].to_sym
+        haml page['content'], :layout => layout, :locals => { :page => page }
       end
       
     end
