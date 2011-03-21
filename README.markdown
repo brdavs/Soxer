@@ -2,7 +2,7 @@ Soxer, the web publishing tool
 ==============================
 
 [Soxer](http://soxer.mutsu.org) is a document/url centric web publishing 
-system. It enables the developer to quickly setup, design and deploy any web based project, from quick mockups to complete portals. 
+system. It enables the developer to quickly setup, design and deploy any web based project, from quick mock-ups to complete portals. 
 
 Soxer is distributed under the terms of [GNU General Public License](http://www.gnu.org/licenses/gpl.htm) and is supported by [Formalibre](http://www.formalibre.si).
 

@@ -176,9 +176,9 @@ module Sinatra
           file = FileReader.new
           file.filename = f
           if block_given?
-            f = block.call file.get_content
+            f = block.call Hashie::Mash.new( file.get_content )
           else
-            f = file.get_content
+            f = Hashie::Mash.new file.get_content
           end
         end.compact
       end

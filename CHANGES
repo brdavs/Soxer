@@ -1,15 +1,23 @@
+= 0.9.10 / 2011-03-21
+  
+  * The function get_list now returns an array of hashies. This was a severe
+    inconsistency.
+  
+  * Fixed incompatibility with Ruby 1.9.2+ where app.rb was called without a
+    local path.
+  
 = 0.9.9 / 2011-03-03
 
   * Changed the names of Classes to match CamelCase convention in Ruby
   
   * Added .eot font to the mime collection to Rack
   
-  * Cleaned up the superfuous blocks of documentation.
+  * Cleaned up the superfluous blocks of documentation.
   
   * Fixed interpretation of layout: 'false' statement, if used inside yaml 
     file.
   
-  * Added dependancy on 'hashie' gem. Now page keys can be accessed 
+  * Added dependency on 'hashie' gem. Now page keys can be accessed 
     as hash keys(strings or symbols) as well as methods.
     The following will yield the same: page[:date], page['date'], page.date
   
@@ -24,7 +32,7 @@
   * YAML file downloading disabled. This was a severe bug.
   
   * Url-to-file routing completely redone, now far more flexible and 
-    extendible, while less error prone.
+    extensible, while less error prone.
   
   * Atom feed generator completely redone. Not backwards compatible. However, 
     it was not logical and mostly broken anyway.
@@ -35,7 +43,7 @@
   
   * Fixed skeleton creation to include empty directories.
   
-  * Developement mode output padded with newline. Annoyance only.
+  * Development mode output padded with newline. Annoyance only.
   
   * get_list now filters list of files: If both 'dir/something.yaml' and 
     'dir/something/index.html' exist, only the first is included.
@@ -50,7 +58,7 @@
   * Created a README.markdown document
   
   * Added sinatra-reloader as dependency, although it's only needed in 
-    developement mode.
+    development mode.
   
   * Added proper license
   
@@ -87,13 +95,13 @@
   
   * Fixed partial generator so it properly handles strings and symbols
   
-  * Cleaned up "soxer test" and only choose "thin" webserver if available.
+  * Cleaned up "soxer test" and only choose "thin" web server if available.
     Defaults to webrick (very slow).
 
 = 0.9.4 / 2010-10-27
   
   * Added executable 'soxer' to help generating application directories and
-    running developement versions
+    running development versions
     
   * Added skeletal directories, and 'empty' skeleton application
 
