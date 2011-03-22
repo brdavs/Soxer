@@ -1,0 +1,29 @@
+uuid: 4198d730-dcb4-012d-f731-001e378a2988
+date: 2010-11-28T01:27:03+01:00
+class: [index]
+author:
+  name: Toni Anzlovar
+title: The blog Atom feed
+summary:
+content: |
+  -#---------------------------------------------------------------[controller]
+  :ruby
+    all = categories = Dir.glob( File.join( settings.origin, 'categories/*' ) )
+    categories.map!{|c| c.split('/').last.split('.').first }.delete 'index'
+    
+    documents = get_list do |d| 
+      #if params['category'] and categories.include? params['category']
+      #  d if d['category'] and d['category'].include? params['category']
+      #end
+      
+      if d['category'] and d['category'].include? params['category']
+        d
+      elsif d['category'] and !params['category']
+        d
+      end
+    end.sort{|a,b| a['date']<=>b['date'] }.reverse
+  -#---------------------------------------------------------------------[view]
+  -documents.each do |doc|
+    =atom doc
+  
+  =params['category']

@@ -1,0 +1,16 @@
+-#-----------------------------------------------------------------[controller]
+:ruby
+  documents = get_list do |d| 
+    d if d['category']
+  end.sort{|a,b| b['date']<=>a['date'] }[0..4]
+-#-----------------------------------------------------------------------[view]
+.block.recent-entries
+  %h2 Recent blog entries
+  .content
+    %ul
+      -documents.each do |doc|
+        %li
+          .date 
+            %small= doc['date']
+          %a{:href=>doc['url']}= doc['title']
+      

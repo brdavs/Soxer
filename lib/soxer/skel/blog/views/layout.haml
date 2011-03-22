@@ -1,0 +1,37 @@
+!!! 5
+%html( lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" )
+  %head
+    %title= "Soxer demo blog: "+page['title']
+    %meta(charset="utf-8")
+    %link(href='/blog.atom' rel='alternate' title='News' type='application/atom+xml')
+    %link( href="/css/#{session[:theme]}/css.css" media="screen" rel="stylesheet" type="text/css" )
+  %body{:class => page['class']}
+    #header
+      .slogan Eternal search for perfection
+      .tagline Soxer, the web publishing tool
+      %hr.hidden
+    #content
+      = breadcrumb
+      #main
+        = yield
+        -if page['category']
+          = partial :doc_docinfo, :locals => { :page => page }
+        %hr.hidden
+      #sidebar
+        =partial :block_about
+        =partial :block_recent
+        =partial :block_categories
+        =partial :block_history
+    #footer
+      %hr.hidden
+      .content
+        :markdown
+          Copyright (C) 2010 Toni Anžlovar
+          
+          [Soxer](http://soxer.mutsu.org) is free software, released under [GPL V3](http://www.gnu.org/licenses/gpl.html).  
+          Stylesheets are subject to [Attribution-ShareAlike 3.0 Unported](http://creativecommons.org/licenses/by-sa/3.0/) license by [Creative Commons](http://creativecommons.org).  
+          
+          _Photo: DNA Sequence:_ Flavio Takemoto, <http://www.takemoto.com.br>  
+          _Photo: Cherry blossoms:_ David Hamel, <http://www.davehamel.com>
+          
+          If you like the concept and/or are using [Soxer](http://soxer.mutsu.org) for a project, please let me know: #{obfuscate 'toni@formalibre.si'}.

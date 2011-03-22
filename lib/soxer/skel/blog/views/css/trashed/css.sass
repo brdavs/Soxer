@@ -1,0 +1,152 @@
+/*
+  -----------------------------------------------------------------------------
+  Trashed Blog Theme for Soxer | http://soxer.mutsu.org
+  Copyright 2010 Toni Anzlovar, toni[at]formalibre.si
+  Attribution-ShareAlike 3.0 | http://creativecommons.org/licenses/by-sa/3.0/
+  -----------------------------------------------------------------------------
+@import "../common"
+
+
+// COLORS
+//-----------------------------------------------------------------------------
+$white: #ffffff
+$link: #375d9d
+$important: #375d9d
+$grey: #808080
+$lite: #dadada
+$normal: #4d4d4d
+
+// GENERAL
+//-----------------------------------------------------------------------------
+body
+  color: $normal
+  font:
+    size: 13px
+    family: "Trebuchet MS", Verdana, Arial, Helvetica, Swiss, Sans-Serif
+  margin: 0
+  padding: 0
+    
+a
+  color: $important
+  text-decoration: none
+  @include corners(3)
+  
+  &:hover
+    color: $white
+    background: $important
+    padding: 0px 3px
+    margin: -0px -3px
+
+h1, h2, h3, h4, h5, h6
+  +n
+
+h1, h2
+  color: $grey
+  font:
+    family: GeoSans
+    weight: normal
+h1
+  font-size: 38px
+  margin:
+    bottom: 30px
+
+h2
+  font-size: 28px
+  a
+    @include corners(7)
+    &:hover
+      @include corners(0)
+      +n
+      color: $important
+      background: none
+      border-bottom: 1px solid $important
+
+hr
+  display: none
+
+// COMMON
+//-----------------------------------------------------------------------------
+body
+  background: url(/css/dna/sequence.jpg) center top no-repeat
+  // @include sh(inset 0px 0px 200px rgba(0, 0, 0, .25))
+  
+#header, #content
+  width: 750px
+  +center
+
+#header
+  height: 260px
+  color: $white
+  text-shadow: black 1px 1px 5px
+  .slogan
+    font:
+      family: GeoSans
+      size: 42px
+    
+    padding-top: 10px
+      
+#content
+  padding-top: 20px
+  &:after
+    +clear
+
+#footer
+  width: 100%
+  background: $lite
+  border-top: 1px solid $grey
+  margin-top: 30px
+  @include sh(inset 0px 0px 100px rgba(0, 0, 0, .25))
+  
+  .content
+    width: 750px
+    height: 180px
+    +center
+
+// MAIN & SIDEBAR
+//-----------------------------------------------------------------------------
+#main, #sidebar
+  float: left
+  min-height: 300px
+  
+#main
+  width: 464px
+  margin:
+    top: 10px
+    left: 286px
+
+  .short
+    margin-top: 30px
+    small
+      color: $grey
+      font:
+        style: italic
+        size: 13px
+    p
+      +n
+  .shot:after
+    +clear
+
+#sidebar
+  width: 272px
+  margin:
+    top: 19px
+    left: -750px
+
+// BLOCKS
+//-----------------------------------------------------------------------------
+.block
+  margin-bottom: 20px
+  ul
+    +cu
+    margin-top: 10px
+    li
+      display: block
+      clear: both
+      +cl
+      margin-bottom: 5px
+  &:after
+    +clear
+
+  &.recent-entries
+    a
+      display: block

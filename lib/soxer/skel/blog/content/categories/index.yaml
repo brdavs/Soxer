@@ -1,0 +1,51 @@
+uuid: 4198f780-dcb4-012d-f732-001e378a2988
+date: 2010-11-24T23:48:55+01:00
+class: [aggregate]
+title: Blog
+summary: |
+  There are many things on this planet, but blogs are obviously one of the most important ones. If they weren't, we'd all be solving the nuclear crisis, feeding the poor, or exploring the unknown reaches of our planet.
+content: |
+  -#---------------------------------------------------------------[controller]
+  :ruby
+    # We create an array of categories from names of files in this
+    # directory. These are simple soft links to this index file.
+    # We exclude the index, as it's not category at all.
+    all = categories = Dir.glob( File.join( settings.origin, 'categories/*' ) )
+    categories.map!{|c| c.split('/').last.split('.').first }.delete 'index'
+    
+    # now we check if URL's last word coresponds to any of the categories found.
+    # If it does, the we set categories to that category, otherwise, all
+    # categories, found previously are used.
+    category = params[:splat].first.split('/').last
+    categories = [category] if categories.include? category
+    
+    # We now filter out the documents, that do not have the category or have
+    # a wrong set of categories.
+    # We sort the set of documents
+    documents = get_list do |doc|
+      doc if doc['category'] and (doc['category'] & categories).length > 0
+    end.sort{|a,b| b['date']<=>a['date'] }
+    
+    # This just ads the category name to the end of UUID for this file.
+    # not very nice, but better, than having all categories share one UUID.
+    page['uuid'] += '-'+categories[0] if categories.length == 1
+    
+    # Ok, we need to slightly alter the title of the page, so we know what are
+    # we watching.
+    title_addition = category.capitalize
+  -#---------------------------------------------------------------------[view]
+  %h1= page['title'] + ' - ' + title_addition
+  .summary
+    %p= page['summary']
+  
+  %h2 Topics covered
+  %ul
+    %li= link_to 'All topics combined', '/categories'
+    -all.each do |category|
+      %li
+        = link_to category.capitalize, '/categories/'+category
+        and the coresponding
+        = link_to 'atom feed', '/blog.atom?category='+category
+  
+  -documents.each do |doc|
+    =partial :doc_short, :locals => { :doc => doc }

@@ -1,0 +1,38 @@
+uuid: 6648b260-da52-012d-f71a-001e378a2988
+date: 2010-11-25T00:42:16+01:00
+class: [doc]
+category: [tutorials]
+title: Soxer application structure
+summary: Every soxer project has a similar default directory structure, workflow and dynamics. As a matter of fact, creating a blog is exactly the same as creating a corporate web page. The only difference is naming your URLs... and perhaps styling with SASS to achieve the desired effect.
+content: |
+  :markdown
+  
+    #{ page['title'] }
+    ==================
+    
+    #### #{ page['summary'] }
+  
+      This blog is an excellent example of the power of soxer. It only takes 3 separate files (excluding configuration) for the entire design, layout, style and whatnot. Ok, we admit, every block in the column is a separate file - so... 6 files:
+      
+      1. **./views/layout.haml**  
+         This is the mama of all html. It represents the HTML layout every page uses. It's written in [HAML](http://haml-lang.com) and uses all bells and whistles haml can offer.
+      2. **./css/*/css.css**  
+         Well, this could be only one css file, but i wanted to make sure you can switch styles on the fly. That's why i created several SASS styles. Also, there is a common sass file, that's included in all designs. It's because I believe programming and [Martini cocktails](http://en.wikipedia.org/wiki/Martini_%28cocktail%29) share [a common trait](http://en.wikipedia.org/wiki/Don%27t_repeat_yourself).
+      3. **./views/_block_*.haml**  
+         These are blocks that appear in the narrow column and other parts of the site (like repetitive short versions of documents and such). They are "snippets" or "partials". Parts of HTML code (ok, you got me... it's HAML), that can be static or dynamic. Like in [Rails](http://rubyonrails.org), they have an underscore at the beginning of the filename. While this may be a convention in rails, it's hard coded here. For now.
+      
+      
+    Content, oh, wonderful content
+    ------------------------------
+      
+    Content resides in - you have probably guessed it - in the **./content** directory.
+    
+    Have a look at the content, the directories and filenames. They map directly to URLs. That way you are free to name your directory structure (and therefore site structure) arbitrarily. Naming directories **./content/categories** or **./content/blog** is arbitrary. We could name them **./content/foo** or **./content/bar** and it would make no difference, only your URLs would be quite daft.
+    
+    The content files are written in [YAML](http://www.yaml.org). Currently soxer requires a yaml file to have a **content:** and content is formated in HAML. This is hard coded at the moment, but might be configurable in the future.
+  
+    
+    What now?
+    ---------
+    
+    Well, play with the source of this blog, find bugs, send me fixes and visit <http://soxer.mutsu.org> for more information.

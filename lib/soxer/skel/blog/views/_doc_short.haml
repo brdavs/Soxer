@@ -1,0 +1,10 @@
+.short
+  %small
+    = doc['date']
+    -doc['category'].each do |cat|
+      |
+      =link_to cat, '/categories/'+cat
+  %h2
+    %a{ :href => doc['url'] }
+      = doc['title']
+  %p= doc['summary']

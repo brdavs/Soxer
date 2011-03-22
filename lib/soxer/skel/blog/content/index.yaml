@@ -1,0 +1,32 @@
+uuid: 4cc0a810-d9d9-012d-f718-001e378a2988
+date: 2010-11-24T00:08:19+01:00
+class: [index]
+title: Simple, elegant, fast, flexible
+summary: |
+  %p Fully themable, featherweight blog using #{link_to 'Soxer', 'http://soxer.mutsu.org'} and #{link_to 'Sinatra', 'http://www.sinatrarb.com'}.
+content: |
+  -#---------------------------------------------------------------[controller]
+  :ruby
+    documents = get_list do |d| 
+      d if d['category']
+    end.sort{|a,b| a['date']<=>b['date'] }.reverse
+  -#---------------------------------------------------------------------[view]
+  %h1= page['title']
+  .summary= haml page['summary']
+  
+  %p You are welcome to explore the code, adapt it to your needs and use it. A couple of stylesheets have been included which should provide a base to develop your own beautiful CSS themes. They written in SASS, showcasing the awsome power of dynamic css generation.
+  
+  %h2 Available themes
+  %ul.themelist
+    %li= link_to 'Blossom brush', '?theme=blossom'
+    %li= link_to 'DNA brush', '?theme=dna'
+    -#%li= link_to 'Trashed', '?theme=trashed'
+  
+  -documents.each do |doc|
+    .short
+      %small= doc['date']
+      %h2
+        %a{ :href => doc['url'] }
+          = doc['title']
+      %p= doc['summary']
+  

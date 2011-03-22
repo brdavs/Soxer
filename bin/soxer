@@ -43,6 +43,7 @@ def help
       
       First parameter:
         #{b 'empty'}     - Creates an empty project
+        #{b 'blog'}      - Creates a simple blog project
         More project templates are in the making
         
         Other parameters:
@@ -75,6 +76,7 @@ end
 
 def create template, dir
   skel = File.dirname(__FILE__)+"/../lib/soxer/skel"
+  dest = File.join Dir.pwd,  dir
   case true
     when template==nil then
       return err "You did not enter the project type skeleton."
@@ -85,8 +87,10 @@ def create template, dir
     when File.exist?(dir) then
       return err "The destination directory exists."
     else
-      FileUtils.copy_entry( File.join(skel, template), dir)
-      FileUtils.rm Dir.glob('**/EMPTY')
+      FileUtils.copy_entry( File.join(skel, template), dest)
+      require dest+'/SETUP'
+      initSkel dest
+      FileUtils.rm dest + '/SETUP.rb'
       return notice "Successfuly created '#{dir}' application directory from '#{template}'."
   end
 end
@@ -110,6 +114,5 @@ end
 # TO COME LATER
 x = <<END
       #{b 'corporate'} - Creates a corporate web page mockup
-      #{b 'blog'}      - Creates a blog mockup
       #{b 'gallery'}   - Creates an image gallery mockup
 END

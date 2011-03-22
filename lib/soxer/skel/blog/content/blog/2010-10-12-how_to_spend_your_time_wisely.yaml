@@ -1,0 +1,20 @@
+uuid: e2121c00-dae1-012d-f724-001e378a2988
+date: 2010-10-12T17:49:23+01:00
+class: [doc]
+category: [rants]
+title: How to spend your time wisely
+summary: CMS tools are great. They keep people occupied, programmers busy, wallets dry and most important of all - the masses doing meanial things into oblivion.
+content: |
+  :markdown
+  
+    #{ page['title'] }
+    ==================
+    
+    #### #{ page['summary'] }
+  
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nunc dolor, porta in interdum ornare, scelerisque sit amet orci. Nullam elit turpis, molestie et imperdiet eu, lobortis vitae quam. Aenean nunc orci, pellentesque et viverra sed, facilisis in nulla. Maecenas laoreet eleifend nunc, vitae convallis lorem rhoncus non. Cras gravida sapien sed lacus aliquet rutrum. In varius leo ac nibh tincidunt accumsan. Nullam ut pulvinar tortor. Vivamus vel pretium quam. Donec vel viverra tortor. Curabitur turpis libero, lacinia et hendrerit id, suscipit in tortor. Cras enim tellus, ornare vitae laoreet id, adipiscing ut nunc. In sed ligula mauris, ut porttitor dui. Sed iaculis eros ac lectus scelerisque hendrerit. Duis sed felis vel ipsum accumsan bibendum. Nulla scelerisque pharetra lacinia. Donec vitae neque risus, eu pellentesque sem. Donec hendrerit mattis augue, vel viverra metus dapibus non. Duis imperdiet augue nec nulla pulvinar molestie. Aenean interdum dapibus dui, et varius orci aliquam auctor. Fusce iaculis, mauris eget laoreet cursus, diam lacus posuere lectus, at gravida nulla risus blandit est.
+
+    Quisque nunc lectus, feugiat a vulputate ac, accumsan placerat nunc. Fusce feugiat pretium enim et ullamcorper. Vestibulum ultrices tristique luctus. Morbi in dolor non tellus mollis elementum ut quis magna. Etiam vel ante massa. Curabitur turpis ipsum, suscipit eu vestibulum nec, lacinia vel nulla. Donec placerat vestibulum auctor. Donec tincidunt egestas ultrices. Fusce porta tortor vitae sem faucibus elementum suscipit nunc vehicula. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+    
+    Vestibulum eu dolor eu justo scelerisque ultrices ac eu risus. Vivamus fermentum neque quis lorem viverra commodo. Donec a mauris quam, in condimentum diam. Aliquam convallis lectus a elit condimentum luctus. Curabitur ultricies eleifend lorem a molestie. Nunc mauris sapien, accumsan eget tincidunt vitae, tincidunt pretium lacus. Etiam porta leo at enim ullamcorper ut semper risus eleifend. Cras sagittis mi nulla, ut mollis enim. Cras enim mauris, aliquet vel dapibus eget, ultrices id mauris. Pellentesque auctor, arcu ac commodo pulvinar, nisi nunc euismod lacus, ac dignissim orci est dignissim enim. Integer nunc felis, aliquam sit amet ultricies sit amet, porttitor eu odio. 
+    

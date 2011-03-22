@@ -1,0 +1,72 @@
+//
+  -----------------------------------------------------------------------------
+  Common theme presets for Soxer | http://soxer.mutsu.org
+  Copyright 2010 Toni Anzlovar, toni[at]formalibre.si
+  Attribution-ShareAlike 2.5 | http://creativecommons.org/licenses/by-sa/2.5/
+  -----------------------------------------------------------------------------
+
+// FONTS
+//-----------------------------------------------------------------------------
+@font-face
+  font-family: GeoSans
+  src: url(/fonts/GeosansLight.ttf)
+
+// SUGAR
+//-----------------------------------------------------------------------------
+// $h = horizontal position
+// $v = vertical position
+// $r = radius
+@mixin corner($h,$v,$r)
+  :-moz-border-radius-#{$h+$v} $r+px
+  :-webkit-border-#{$v+$h}-radius $r+px
+  :border-#{$v+$h}-radius $r+px
+
+@mixin corners($r)
+  :-moz-border-radius $r+px
+  :-webkit-border-radius $r+px
+  :border-radius $r+px
+
+// $x = horizontal offset
+// $y = vertical offset
+// $r = radius
+// $red = red component
+// $green = green component
+// $blue = blue component
+// $alpha = transparency (opacity)
+@mixin shaddow($x,$y,$r,$red,$green,$blue,$alpha)
+  :box-shadow #{$x}px #{$y}px #{$r}px rgba($red, $green, $blue, $alpha)
+  :-webkit-box-shadow #{$x}px #{$y}px #{$r}px rgba($red, $green, $blue, $alpha)
+  :-moz-box-shadow #{$x}px #{$y}px #{$r}px rgba($red, $green, $blue, $alpha)
+
+@mixin sh($sh)
+  :box-shadow $sh
+  :-webkit-box-shadow $sh
+  :-moz-box-shadow $sh
+
+=n
+  margin: 0 0 0 0
+  padding: 0 0 0 0
+
+=cu
+  +n
+  list-style: none
+
+=cl
+  float: left
+  +n
+  list-style: none
+  list-style-image: none
+  list-style-type: none
+
+
+=center
+  margin:
+    left: auto
+    right: auto
+
+=clear
+  content: "."
+  display: block
+  height: 0
+  clear: both
+  visibility: hidden

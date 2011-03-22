@@ -1,0 +1,20 @@
+uuid: 41987df0-dcb4-012d-f72f-001e378a2988
+date: 2010-04-16T16:29:22+01:00
+class: [doc]
+category: [tutorials, recipes, rants]
+title: Ecce quomodo moriur iustus
+summary: Maecenas quis ligula enim, ut luctus urna. Cras cursus, sem non gravida laoreet, purus felis venenatis tortor, sed commodo augue libero ac metus.
+content: |
+  :markdown
+  
+    #{ page['title'] }
+    ==================
+    
+    #### #{ page['summary'] }
+    
+    Ut consequat suscipit tincidunt. Nullam nulla magna, tincidunt ac aliquet vitae, viverra in odio. Ut sagittis erat at lorem lacinia vel convallis tortor dignissim. Aliquam erat volutpat. Donec dui elit, scelerisque suscipit tincidunt quis, suscipit et metus. Aliquam erat volutpat. Curabitur egestas velit orci. Maecenas euismod rhoncus condimentum. Ut mattis mollis ligula, malesuada consectetur sapien condimentum nec. Quisque pellentesque interdum diam, sed gravida arcu consectetur ac. Cras auctor mi nec ante elementum blandit.
+    
+    In tempus cursus ipsum ac cursus. Quisque nec vulputate justo. Maecenas quis ligula enim, ut luctus urna. Cras cursus, sem non gravida laoreet, purus felis venenatis tortor, sed commodo augue libero ac metus. Quisque eget mauris sed magna cursus laoreet. Fusce augue lacus, dictum luctus sagittis ut, convallis in risus. Etiam gravida tincidunt ultrices. In hac habitasse platea dictumst. Vestibulum faucibus dolor quis magna dapibus consequat. Aenean mi nibh, tempus id placerat in, volutpat nec sem. Nunc congue bibendum leo. Aliquam viverra egestas pellentesque. Duis dictum, metus id eleifend tincidunt, diam nisl venenatis ante, a tempor turpis enim in nunc. Etiam id sem magna, tempor eleifend nisl. Quisque tortor metus, interdum et cursus sodales, ullamcorper at orci.
+    
+    Cras eget justo sit amet nibh viverra condimentum. Aenean in neque eget ligula convallis mollis. Nulla ac diam erat, id tristique eros. Sed quis ligula vitae nisl laoreet dictum eget eget sapien. Nulla vehicula elit in sem feugiat sollicitudin eget in lorem. Integer erat metus, aliquam nec cursus a, dignissim in felis. Etiam arcu purus, iaculis non malesuada vel, faucibus luctus nibh. Aenean eros sem, fermentum at blandit ut, tincidunt pharetra tortor. Ut massa dui, imperdiet vitae interdum ac, pretium eget eros. Mauris blandit nibh sed tellus iaculis quis vestibulum metus sagittis. Duis sit amet odio id odio eleifend sagittis nec nec sem. Nulla facilisi. In bibendum justo et velit lobortis convallis. Pellentesque purus orci, vehicula et rutrum a, lacinia nec felis. Vivamus malesuada quam vitae ligula aliquet ut sodales sapien lacinia. Pellentesque blandit dolor in tellus accumsan lobortis. Vestibulum vel erat odio. Maecenas vel massa vitae metus condimentum faucibus mattis ut leo. 
+    

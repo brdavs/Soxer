@@ -1,0 +1,23 @@
+-#-----------------------------------------------------------------[controller]
+:ruby
+  history ||= {}
+  
+  documents = get_list {|d| d if d['category'] }.sort{|b,a| a['date']<=>b['date'] }
+  documents.each do |d|
+    y, m = d['date'].year, d['date'].month
+    history[y] ||= {}
+    history[y][m] ||= [] 
+    history[y][m] << d['url']
+  end
+-#-----------------------------------------------------------------------[view]
+.block
+  %h2 History
+  .content
+    %h4 This block is currently not working properly.
+    %ul
+      -history.each_pair do |y,m|
+        -m.each_pair do |mm,dd|
+          %li
+            %b #{y}
+            #{link_to Date::MONTHNAMES[mm], '#'}
+            %i (#{dd.count})

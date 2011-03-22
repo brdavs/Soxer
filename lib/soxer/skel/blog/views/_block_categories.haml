@@ -1,0 +1,12 @@
+-#-----------------------------------------------------------------[controller]
+:ruby
+  categories = Dir.glob( File.join( settings.origin, 'categories/*' ) )
+  categories.map!{|c| c.split('/').last.split('.').first }.delete 'index'
+-#-----------------------------------------------------------------------[view]
+.block
+  %h2 Categories
+  .content
+    %ul
+      %li= link_to 'All categories combined', '/categories'
+      -categories.each do |category|
+        %li= link_to category.capitalize, '/categories/'+category
