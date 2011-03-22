@@ -1,0 +1,16 @@
+:ruby
+  home ||= 'home'
+  crumbpaths ||= []
+  crumbs = params[:splat].first.split('/')
+  crumbs.each do |crumb|
+    path = File.join crumbs[0..crumbs.index(crumb)]
+    path = '/' and crumb=home if path==''
+    crumbpaths << [path, crumb]
+  end
+  crumbpaths = [['/', home]] if crumbs.length==0
+
+.breadcrumb
+  -crumbpaths.each do |crumbpath|
+    -unless crumbpaths.index(crumbpath)==0
+      %span ►
+    %a{ :href=>crumbpath[0] }= crumbpath[1]

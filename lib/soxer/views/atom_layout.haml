@@ -1,0 +1,13 @@
+%feed(xmlns="http://www.w3.org/2005/Atom")
+  %title= page['title']
+  %link{:href=>request.url.split(request.fullpath)[0].gsub(/:\d+/, '')}
+  %link(rel="self"){:href=>request.url.gsub(/:\d+/, '')}
+  %id= "urn:uuid:"+page['uuid']
+  %updated= page['mtime'].xmlschema
+  %author
+    %name= page['author']['name']
+    - if page['author']['email'] and page['author']['email'].length > 0
+      %email= page['author']['email']
+    - if page['author']['uri'] and page['author']['uri'].length > 0
+      %uri= page['author']['uri']
+  =yield
