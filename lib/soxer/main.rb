@@ -1,5 +1,4 @@
 # encoding: utf-8
-
 require 'hashie'
 require 'sinatra/base'
 require 'yaml'
@@ -40,19 +39,19 @@ module Sinatra
 
       attr_accessor :filename
       
-      def initialize filename
-        @filename = filename
+      def initialize filename, settings
+        @f, @s = filename, settings
       end
       
-      # The method, that retuns the YAML structure in a ::hash::.
+      # The method, that retuns the YAML structure in a ::hashie hash::.
+      # Hashie makes the hash keys accessible either strings, symbols or methods.
       def get_content
-        # self.settings
-        out = YAML.load_file( @filename )
+        out = YAML.load_file( @f )
         add_date unless out['date']
         add_id unless out['uuid']
-        out['url'] = @filename.gsub(/.*\/(.+)\.yaml$/, "\\1" ).gsub(/(.+)\/index$/, "\\1" )
-        out['mtime'] =  File.mtime( @filename )
-        out
+        out['url'] = @f.gsub(/#{@s.origin}\/(.+)\.yaml$/, "\\1" ).gsub(/(.+)\/index$/, "\\1" )
+        out['mtime'] =  File.mtime( @f )
+        Hashie::Mash.new out
       end
       
       private
@@ -61,18 +60,18 @@ module Sinatra
       # Identifier field to the data structure.
       def add_id
         mtime = File.mtime( @filename )
-        File.open( @filename, 'r+' ) do |f|
+        File.open( @f, 'r+' ) do |f|
           out = "uuid: #{UUID.new.generate}\n"
           out << f.read; f.pos =  0
           f << out
         end
-        File.utime( 0, mtime, @filename )
+        File.utime( 0, mtime, @f )
       end
       
       # A private method, that adds a standard Time.now to the data structure.
       def add_date
-        mtime = File.mtime( @filename )
-        File.open( @filename, 'r+' ) do |f|
+        mtime = File.mtime( @f )
+        File.open( @f, 'r+' ) do |f|
           out = "date: #{mtime.xmlschema}\n"
           out << f.read; f.pos =  0
           f << out
@@ -90,19 +89,19 @@ module Sinatra
     
       attr_accessor :url
       
-      def initialize url, options
-        @url, @options = url, options
+      def initialize url, settings
+        @url, @s = url, settings
       end
       
       # Creates a FileReader instance, maps the url to either yaml file or 
       # index.yaml within a directory represented by url.
       def get_content
         fn = case true
-             when File.exist?( f = File.join( @options.origin, @url+'.yaml' ) ) then f
-             when File.exist?( f = File.join( @options.origin, @url+'/index.yaml' ) ) then f
+             when File.exist?( f = File.join( @s.origin, @url+'.yaml' ) ) then f
+             when File.exist?( f = File.join( @s.origin, @url+'/index.yaml' ) ) then f
              else throw :halt, [404, "Document not found"]
              end
-        FileReader.new(fn).get_content
+        FileReader.new(fn, @s).get_content
       end
     end
     
@@ -110,6 +109,7 @@ module Sinatra
     # 
     # This module introduces several helper methods to Soxer application.
     module Helpers
+
       # === Document reader
       # This method reads a yaml file from disk and returns a hash.
       # 
@@ -120,8 +120,8 @@ module Sinatra
       # ====Returns
       # [=> Hash]
       #   A hash representation of yaml file.
-      def get_page url=params[:splat][0], options=options
-        Hashie::Mash.new UrlReader.new(url, options).get_content
+      def get_page url=params[:splat][0]
+        UrlReader.new(url, options).get_content
       end
   
       # === Document list generator method
@@ -134,15 +134,15 @@ module Sinatra
       # ====Returns
       # [=> Array]
       #   Array of hashes representing yaml files.
-      def get_list options=options, &block 
+      def get_list &block 
         fileset= Dir.glob File.join( options.origin, "**", "*.yaml" )
         fileset.delete_if {|d| (d=~/\/index.yaml$/ and fileset.include? d[0..-12]+'.yaml') }
         output = fileset.map! do |f|
-          file = FileReader.new f
+          file = FileReader.new f, options
           if block_given?
-            f = block.call Hashie::Mash.new( file.get_content )
+            f = block.call file.get_content
           else
-            f = Hashie::Mash.new file.get_content
+            f = file.get_content
           end
         end.compact
       end
@@ -310,12 +310,14 @@ module Sinatra
     end
     
     def self.registered(app)
-    
+      
+      @s = app.settings
+      
       app.helpers Soxer::Helpers
       
-      mime_type :otf, 'application/x-font-TrueType'
-      mime_type :ttf, 'application/x-font-TrueType'
-      mime_type :eot, 'application/vnd.ms-fontobject'
+      app.mime_type :otf, 'application/x-font-TrueType'
+      app.mime_type :ttf, 'application/x-font-TrueType'
+      app.mime_type :eot, 'application/vnd.ms-fontobject'
       
       app.get("/sitemap.xml") { sitemap }
 
@@ -355,9 +357,9 @@ module Sinatra
       app.get '*/?' do
         content_type "text/html", :charset => "utf-8"
         page = get_page
-        page['layout'] ||= 'layout'
-        page['layout'] == 'false' ? layout = false : layout = page['layout'].to_sym
-        haml page['content'], :layout => layout, :locals => { :page => page }
+        page.layout ||= 'layout'
+        page.layout == 'false' ? layout = false : layout = page.layout.to_sym
+        haml page.content, :layout => layout, :locals => { :page => page }
       end
       
     end
@@ -365,4 +367,3 @@ module Sinatra
   
   register Soxer
 end
-
