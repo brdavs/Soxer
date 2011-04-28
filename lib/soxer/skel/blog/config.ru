@@ -3,10 +3,12 @@ require "sinatra/base"
 require "./app"
 
 disable :run
-set :server, %w[thin mongrel webrick]
+# set :server, %w[thin mongrel webrick]
 set :haml, {:format => :html5, 
             :attr_wrapper => '"'}
-set :haml, {:encoding => 'utf-8'} if RUBY_VERSION=~/1\.9/
+# set :haml, {:encoding => 'utf-8'} if RUBY_VERSION=~/1\.9/
+
+set :origin, settings.root+'/content'
 
 configure :development do
   require 'sinatra/reloader'
