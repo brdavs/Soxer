@@ -4,6 +4,7 @@ require 'hashie'
 require 'sinatra/base'
 require 'yaml'
 require 'haml'
+require 'sass'
 require 'uuid'
 
 #== Sinatra, web publishing DSL

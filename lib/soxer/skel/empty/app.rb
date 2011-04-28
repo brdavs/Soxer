@@ -3,6 +3,6 @@ require "rubygems"
 require "sinatra"
 require "soxer"
 
-class SoxerApp < Sinatra::Base
+class SoxerApp < Sinatra::Application
   register Sinatra::Soxer
 end
