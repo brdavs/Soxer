@@ -1,6 +1,6 @@
 require "rubygems"
 require "sinatra/base"
-require "app"
+require "./app"
 
 disable :run
 set :server, %w[thin mongrel webrick]

@@ -5,5 +5,4 @@ require "soxer"
 
 class SoxerApp < Sinatra::Base
   register Sinatra::Soxer
-
 end

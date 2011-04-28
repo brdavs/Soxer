@@ -1,3 +1,14 @@
+= 0.9.11 / 2011-04-28
+  
+  * Fixed relative paths in config.ru for app requirement.
+  
+  * Fixed scoping inside classes. This was a severe bug.
+    How come it worked until sinatra 1.2.3 ?
+  
+  * Deleted unneeded classes.
+  
+  * Added initialization to objects.
+  
 = 0.9.10 / 2011-03-22
   
   * The function get_list now returns an array of hashies. This was a severe
