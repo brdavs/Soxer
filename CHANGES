@@ -1,13 +1,26 @@
-= 0.9.11 / 2011-04-28
+= 0.9.11 / 2011-04-30
   
   * Fixed relative paths in config.ru for app requirement.
   
   * Fixed scoping inside classes. This was a severe bug.
-    How come it worked until sinatra 1.2.3 ?
+    It's a mistery how it worked until sinatra 1.2.3...
   
   * Deleted unneeded classes.
   
   * Added initialization to objects.
+  
+  * Properly modularized Soxer. There are now no global settings that
+    Soxer uses
+  
+  * Soxer sets up several application speciffic directories, which can be
+    changed inside SoxerApp.
+    
+  * Setting up the root of application is now mandatory.
+  
+  * Changed and cleaned skeletal application's app.rb and config.ru files
+    to reflect the new modularity.
+  
+  * Renamed config.yml to config.yml.example, added cosmetic fixes to it.
   
 = 0.9.10 / 2011-03-22
   

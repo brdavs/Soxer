@@ -311,7 +311,12 @@ module Sinatra
     
     def self.registered(app)
       
-      @s = app.settings
+      if app.settings.root then
+        app.set :origin, File.join(app.settings.root, 'content') unless app.settings.respond_to? 'content'
+        app.set :public, File.join(app.settings.root, 'public') unless app.settings.respond_to? 'public'
+        app.set :views, File.join(app.settings.root, 'views') unless app.settings.respond_to? 'views'
+        app.set :log, File.join(app.settings.root, 'log') unless app.settings.respond_to? 'log'
+      end
       
       app.helpers Soxer::Helpers
       
