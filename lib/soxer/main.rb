@@ -59,7 +59,7 @@ module Sinatra
       # A private method, that generates and adds a Universally Unique 
       # Identifier field to the data structure.
       def add_id
-        mtime = File.mtime( @filename )
+        mtime = File.mtime( @f )
         File.open( @f, 'r+' ) do |f|
           out = "uuid: #{UUID.new.generate}\n"
           out << f.read; f.pos =  0
