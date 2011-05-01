@@ -49,7 +49,7 @@ module Sinatra
         out = YAML.load_file( @f )
         add_date unless out['date']
         add_id unless out['uuid']
-        out['url'] = @f.gsub(/#{@s.origin}\/(.+)\.yaml$/, "\\1" ).gsub(/(.+)\/index$/, "\\1" )
+        out['url'] = @f.gsub(/#{@s.origin}(.+)\.yaml$/, "\\1" ).gsub(/(.+)\/index$/, "\\1" )
         out['mtime'] =  File.mtime( @f )
         Hashie::Mash.new out
       end
