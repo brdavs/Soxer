@@ -5,7 +5,7 @@ def colorize(text, color_code); "\033#{color_code}#{text}\033[0m"; end
 def b(text); colorize(text, "[1m"); end
 
 def h
-  '-'*79+"\n#{b 'Soxer'}, the web publishing tool. | Copyright 2010, Toni Anzlovar.\n"+'-'*79
+  '-'*79+"\n#{b 'Soxer'}, the web publishing tool. | Copyright 2010-11, Toni Anzlovar.\n"+'-'*79
 end
 
 def err message
@@ -37,28 +37,43 @@ def help
     
   Actions:
   
-    #{b 'create'}
+    #{b 'create'} (No defaults)
       Creates a new soxer project directory with default sinatra/soxer layout.
       All aspects can be later customized to suite project's needs.
       
       First parameter:
-        #{b 'empty'}     - Creates an empty project
-        #{b 'blog'}      - Creates a simple blog project
+        #{b 'empty'}     - Creates an empty project.
+        #{b 'blog'}      - Creates a simple blog project.
         More project templates are in the making
         
         Other parameters:
-          #{b '[name]'}  - The name of the project directory
+          #{b '[name]'}  - The name of the project directory.
+          
+          
+    #{b 'generate'} (Default: generate paths static)
+      Generates a static soxer site based on your content.
+      
+      First parameter:
+        #{b 'htmls'}     - Generates a static sate with .html extensions.
+        #{b 'paths'}     - Generates a static sate with directories / indexes.
+        More static site options in the making
         
-    #{b 'test'}
+        Other parameters:
+          #{b '[name]'}  - The name of the static site directory.
+                
+                
+    #{b 'test'} (Default: soxer test 9394)
       Runs the developement server (in the foreground) on your computer.
       Point your browser to #{b 'http://localhost:9394'} to view the result.
       You can exit with standard [ctrl]+c.
       
       Parameters:
         #{b '[int]'} - Port number you wish to run developement on
-      
+        
+        
     #{b 'help'}
       Displays this help.
+  
   
   Examples:
   
@@ -66,6 +81,14 @@ def help
     This command would create a new project directory 'app' with a mockup empty
     soxer/sinatra application in it. You can tweak the design and parameters to
     acheve the desired experience.
+  
+  #{b '$ soxer generate htmls static'}
+    This command would generate a static set of html files (with .html ending)
+    in directory static in current directory.
+    Option 'htmls' makes the site directory cleaner and easier to understand, but
+    introduces nasty '.html' in page urls.
+    Oprion 'paths' makes every url into a directory with index file. This makes a
+    bunch of directories, but makes urls absent of '.html'
     
   #{b '$ soxer test 8907'}
     This command (when executed within the soxer project directory root) will
@@ -95,6 +118,114 @@ def create template, dir
   end
 end
 
+def generate argv
+  require 'net/http'
+  require 'open3'
+
+  type ||= 'paths'; type = argv[0] if argv[0]
+  dir ||= 'static'; dir = argv[1] if argv[1]
+  
+  # Fix URLs in html file according to type of static site generated
+  def fixurls path, data, type
+    if type == 'paths'
+      data.gsub!(/(href|src)="\/([^"]*)/) do |s|
+        case true
+          when ( path == '/index' and path.split('/').count == 2 )
+            s = $1 + '="./' + $2
+          when ( path != '/index' )
+            prepath = '../' * (path.split('/').count - 1)
+            s = $1 + '="' + prepath + $2
+          else
+            s = $&
+        end
+      end
+    end
+    
+    if type == 'htmls' then
+      data.gsub!(/(\<[^>]+)(href="|src=")(\/[^"]*)([^>]+\>)/) do |s|
+        if $2 == 'href="' and !( $&.include? 'rel="stylesheet"' )
+          ending = '.html'
+        else ending = '';
+        end
+        case true
+          when path.split('/').count == 2
+            s = $1+$2+'.'+$3+ending+$4
+          when path.split('/').count > 2
+            prepath = '../' * (path.split('/').count - 2)
+            s = $1+$2+prepath[0..-2]+$3+ending+$4
+          else
+            s = $&
+        end
+      end      
+      data.gsub!(/(href="[^"]*\/)(\.html)/, '\1index\2') 
+    end
+    return data
+  end
+  
+  def writefile what, where
+    File.open( where, 'w') do |f|
+      f.puts what
+    end
+  end
+  
+  # Can we sniff out a free port in a better way?
+  s = TCPServer.new('127.0.0.1', 0); port = s.addr[1]; s.close 
+
+  server = 'webrick'
+  ENV['PATH'].split(':').each {|folder| server = 'thin' if File.exists?(folder+'/thin')}
+  
+  i,o,e,w = Open3.popen3 "rackup -s #{server} -p #{port}"
+  sleep 3
+  sitemap = Net::HTTP.get URI.parse("http://localhost:#{port}/sitemap.xml")
+  stylesheets = []
+  out = []
+  
+  # Get all documents listed in sitemap
+  sitemap.scan(/http\:\/\/localhost[^<]+/).each do |url|
+    path = url.sub /http:\/\/localhost:\d+/, '' 
+    html = path+'.html'
+    htm = path+'.htm'
+    data = Net::HTTP.get URI.parse "http://localhost:#{port}#{path}"
+    
+    # Get header and scan for dynamically generated stuff (css mainly)
+    if header = data.scan(/\<head\>.+?\<\/head\>/m)[0] then
+      header.scan(/[^'"=]+\.css/).each {|ss| stylesheets << ss }
+    end
+    
+    # Fix local URLs to relative
+    reldata = fixurls path, data, type
+
+    # Generate paths & files
+    case type
+      when 'paths'
+        d = File.join(dir, path)
+        FileUtils.mkpath d
+        writefile reldata, d + '/index.html'
+        FileUtils.cp dir + '/index/index.html', dir + '/index.html' if File.exist? dir + '/index/index.html'
+      when 'htmls'
+        f = path.split('/').last
+        d = File.join(dir, path.split('/')[0..-2].join('/'))
+        FileUtils.mkpath d
+        writefile reldata, d + '/' + f + '.html'
+    end
+  end
+  
+  # Get stylesheets out of HTML headers
+  stylesheets.uniq.compact.each do |s|
+    d = s.split('/'); d.pop; d.join('/')
+    FileUtils.mkdir_p File.join(dir, d)
+    data = Net::HTTP.get URI.parse "http://localhost:#{port}#{s}"
+    writefile data, File.join(dir, s)
+  end
+  
+  # Copy static files and clean up
+  FileUtils.copy_entry( 'public', dir)
+  e = w.pid
+  Process.kill 9, w.pid
+  
+  return notice "Successfully generated static #{type}."
+end
+
 def test port
   port = 9394 unless port!=nil
   server = 'webrick'
@@ -106,7 +237,7 @@ end
 case $*[0]
   when 'create' then printf create $*[1], $*[2]
   when 'test' then printf test $*[1]
-  when 'prank' then printf prank
+  when 'generate' then printf generate $*[1..-1]
   when 'help' then printf help
   else printf err 'You did not specify an action!'
 end

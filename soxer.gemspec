@@ -4,8 +4,8 @@ Gem::Specification.new do |s|
   s.rubygems_version = '1.3.7'
 
   s.name              = 'soxer'
-  s.version           = '0.9.12'
-  s.date              = '2011-04-30'
+  s.version           = '0.9.13'
+  s.date              = '2011-05-15'
   s.rubyforge_project = 'soxer'
 
   s.summary     = "Dynamic web site generator engine"
