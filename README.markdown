@@ -45,5 +45,6 @@ This will generate a set of htmls (ending with .html) a directory called 'static
 
 It's that simple.
 
-You can read more about soxer on <http://soxer.mutsu.org>, which hosts a growing list of tutorials. You can also contact the author at **toni at formalibre dot si**.
+You can read more about soxer on <http://soxer.mutsu.org>, which hosts a growing list of tutorials.  
+You can also contact the author at **toni at formalibre dot si**.
 
