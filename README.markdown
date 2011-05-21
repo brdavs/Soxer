@@ -40,7 +40,7 @@ The directory webpage, which you just created has everything you need to run you
 `$ cd webpage; soxer test`
 
 You can even create a static site:
-`soxer generate htmls static`
+`$ soxer generate htmls static`
 This will generate a set of htmls (ending with .html) a directory called 'static' inside your project directory.
 
 It's that simple.
