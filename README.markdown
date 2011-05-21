@@ -39,8 +39,8 @@ To create a "hello world" type 'empty' application named 'webpage', you can run:
 The directory webpage, which you just created has everything you need to run your first soxer application. Just enter it and run soxer in developement mode:  
 `$ cd webpage; soxer test`
 
-You can even create a static site:
-`$ soxer generate htmls static`
+You can even create a static site:  
+`$ soxer generate htmls static`  
 This will generate a set of htmls (ending with .html) a directory called 'static' inside your project directory.
 
 It's that simple.
