@@ -13,6 +13,7 @@ It's strong points include:
 - There is no relational database back end.
 - It uses and follows standards. The document format is [YAML](http://www.yaml.org)
 - Document model is loose (adaptable "on the fly") and only determined by your views or partials.
+- Final deployment can be dynamic or static.
 - It's a Sinatra modular application, so you can easily incorporate it into existing project.
 
 What Soxer is not (yet)...
@@ -36,9 +37,11 @@ To create a "hello world" type 'empty' application named 'webpage', you can run:
 `$ soxer create empty webpage`
 
 The directory webpage, which you just created has everything you need to run your first soxer application. Just enter it and run soxer in developement mode:  
-<code>
-  $ cd webpage; soxer test
-</code>
+`$ cd webpage; soxer test`
+
+You can even create a static site:
+`soxer generate htmls static`
+This will generate a set of htmls (ending with .html) a directory called 'static' inside your project directory.
 
 It's that simple.
 
