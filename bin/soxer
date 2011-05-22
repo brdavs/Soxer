@@ -125,6 +125,8 @@ def generate argv
   type ||= 'paths'; type = argv[0] if argv[0]
   dir ||= 'static'; dir = argv[1] if argv[1]
   
+  return err 'The static site type does not exist.' unless %w[htmls paths].include? type
+  
   # Fix URLs in html file according to type of static site generated
   def fixurls path, data, type
     if type == 'paths'
