@@ -5,11 +5,11 @@ Gem::Specification.new do |s|
 
   s.name              = 'soxer'
   s.version           = '0.9.13'
-  s.date              = '2011-05-15'
+  s.date              = '2011-05-23'
   s.rubyforge_project = 'soxer'
 
   s.summary     = "Dynamic web site generator engine"
-  s.description = "Soxer is a file based dynamic web site creation tool for Sinatra."
+  s.description = "Soxer is a file based static/dynamic web site creation tool for Sinatra."
 
   s.authors  = ["Toni Anzlovar"]
   s.email    = 'toni@formalibre.si'
