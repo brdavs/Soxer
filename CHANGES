@@ -1,3 +1,10 @@
+= 0.9.13 / 2011-05-23
+  
+  * Added a completely new feature: Static website creation.
+  
+  * Fixed a bug generating paths in lists. This was a serious bug and in 
+    some cases made the site useless for navigation.
+
 = 0.9.12 / 2011-04-30
   
   * Fixed a slipped variable name, that disabled UUID generation.
