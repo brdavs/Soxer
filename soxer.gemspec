@@ -4,8 +4,8 @@ Gem::Specification.new do |s|
   s.rubygems_version = '1.3.7'
 
   s.name              = 'soxer'
-  s.version           = '0.9.13'
-  s.date              = '2011-05-23'
+  s.version           = '0.9.15'
+  s.date              = '2011-10-25'
   s.rubyforge_project = 'soxer'
 
   s.summary     = "Dynamic web site generator engine"
@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency('sinatra', "~> 1")
   s.add_dependency('haml', "~> 3")
+  s.add_dependency('sass', "~> 3")
   s.add_dependency('uuid', "~> 2")
   s.add_dependency('hashie', "~> 1.0.0")
   s.add_dependency('sinatra-reloader', "~> 0.5")

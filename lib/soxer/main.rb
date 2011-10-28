@@ -121,7 +121,7 @@ module Sinatra
       # [=> Hash]
       #   A hash representation of yaml file.
       def get_page url=params[:splat][0]
-        UrlReader.new(url, options).get_content
+        UrlReader.new(url, settings).get_content
       end
   
       # === Document list generator method
@@ -135,10 +135,10 @@ module Sinatra
       # [=> Array]
       #   Array of hashes representing yaml files.
       def get_list &block 
-        fileset= Dir.glob File.join( options.origin, "**", "*.yaml" )
+        fileset= Dir.glob File.join( settings.origin, "**", "*.yaml" )
         fileset.delete_if {|d| (d=~/\/index.yaml$/ and fileset.include? d[0..-12]+'.yaml') }
         output = fileset.map! do |f|
-          file = FileReader.new f, options
+          file = FileReader.new f, settings
           if block_given?
             f = block.call file.get_content
           else
@@ -313,7 +313,7 @@ module Sinatra
       
       if app.settings.root then
         app.set :origin, File.join(app.settings.root, 'content') unless app.settings.respond_to? 'content'
-        app.set :public, File.join(app.settings.root, 'public') unless app.settings.respond_to? 'public'
+        app.set :public_folder, File.join(app.settings.root, 'public') unless app.settings.respond_to? 'public'
         app.set :views, File.join(app.settings.root, 'views') unless app.settings.respond_to? 'views'
         app.set :log, File.join(app.settings.root, 'log') unless app.settings.respond_to? 'log'
       end

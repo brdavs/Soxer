@@ -1,3 +1,16 @@
+= 0.9.15 / 2011-10-23
+
+  * Fixed Sinatra::Base#options => Sinatra::Base#settings
+    This was upstream change. Cannot help it.
+  
+  * Static site creation is mostly broken at the moment. Do not rely on it.
+    
+= 0.9.14 / 2011-10-07
+
+  * Fixed :public => :public_folder arround line 316 in main.rb (rack)
+    Update any evental applications, that use :public to :public_folder
+    This was upstream change. Cannot help it.
+
 = 0.9.13 / 2011-05-23
   
   * Added a completely new feature: Static website creation.
