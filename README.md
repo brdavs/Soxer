@@ -26,21 +26,31 @@ Test drive the soxer
 --------------------
 
 You can install soxer by:  
-`$ sudo gem install soxer`
+```bash
+sudo gem install soxer
+```
 
 You can benefit by installing 2 more gems:  
-`$ sudo gem install thin rdiscount`
+```bash
+sudo gem install thin rdiscount`
+```
 
 Thin and rdiscount are not necessary for Soxer to run, but they make it run much faster even in development mode. [Thin](http://code.macournoyer.com/thin) is a production ready rubyweb server, [rdiscount](http://github.com/rtomayko/rdiscount) is a ruby interface to [discount](http://www.pell.portland.or.us/~orc/Code/discount), a C implementation of [Markdown](http://daringfireball.net/projects/markdown).
 
 To create a "hello world" type 'empty' application named 'webpage', you can run:  
-`$ soxer create empty webpage`
+```bash
+soxer create empty webpage
+```
 
 The directory webpage, which you just created has everything you need to run your first soxer application. Just enter it and run soxer in developement mode:  
-`$ cd webpage; soxer test`
+```bash
+cd webpage; soxer test
+```
 
 You can even create a static site:  
-`$ soxer generate htmls static`  
+```bash
+soxer generate htmls static
+```  
 This will generate a set of htmls (ending with .html) a directory called 'static' inside your project directory.
 
 It's that simple.
